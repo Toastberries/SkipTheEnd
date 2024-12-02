@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "package": "xyz.toastberries.skiptheend.mixin",
+  "mixins": [
+    "EndPortalTeleportTargetMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

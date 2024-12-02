@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "skiptheend",
+	"version": "${version}",
+	"name": "Skip The End",
+	"description": "Disables the end, while keeping portal travel.",
+	"authors": [
+		"Toastberries"
+	],
+	"contact": {
+		"sources": "https://github.com/Toastberries/Skip-The-End"
+	},
+	"license": "MIT",
+	"icon": "assets/skiptheend/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"xyz.toastberries.skiptheend.SkipTheEnd"
+		]
+	},
+	"mixins": [
+		"skiptheend.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.20",
+		"minecraft": ">=1.21",
+		"java": ">=21"
+	}
+}
