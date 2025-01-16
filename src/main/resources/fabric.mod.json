@@ -13,11 +13,7 @@
 	"license": "MIT",
 	"icon": "assets/skiptheend/icon.png",
 	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"xyz.toastberries.skiptheend.SkipTheEnd"
-		]
-	},
+	"entrypoints": {},
 	"mixins": [
 		"skiptheend.mixins.json"
 	],
