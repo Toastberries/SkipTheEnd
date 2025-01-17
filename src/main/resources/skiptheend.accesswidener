@@ -1,0 +1,3 @@
+accessWidener v2 named
+
+accessible method net/minecraft/entity/Entity teleportCrossDimension (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/entity/Entity;

@@ -2,7 +2,8 @@
   "required": true,
   "package": "xyz.toastberries.skiptheend.mixin",
   "mixins": [
-    "EndPortalTeleportTargetMixin"
+    "EntityMixin",
+    "ServerPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
