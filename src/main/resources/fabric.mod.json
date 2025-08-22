@@ -13,13 +13,18 @@
 	"license": "MIT",
 	"icon": "assets/skiptheend/icon.png",
 	"environment": "*",
-	"entrypoints": {},
+	"entrypoints": {
+        "main": [
+            "xyz.toastberries.skiptheend.SkipTheEnd"
+        ]
+    },
 	"mixins": [
 		"skiptheend.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.14.20",
-		"minecraft": ">=1.21",
+        "fabric-api": "*",
+		"minecraft": ">=1.21.6",
 		"java": ">=21"
 	}
 }

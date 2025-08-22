@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
+import static xyz.toastberries.skiptheend.SkipTheEnd.SKIP_THE_END;
 import static xyz.toastberries.skiptheend.TeleportContext.portalTravelingToEnd;
 
 @Mixin(Entity.class)
@@ -19,7 +20,8 @@ public abstract class EntityMixin {
     @Redirect(method = "tickPortalTeleportation",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/entity/Entity;"))
     private Entity redirectEndBoundPortalTravel(Entity instance, TeleportTarget teleportTarget) {
-        if (teleportTarget.world().getRegistryKey() == World.END && instance.getWorld().getRegistryKey() != World.END) {
+        boolean gameRule = ((ServerWorld) instance.getWorld()).getGameRules().getBoolean(SKIP_THE_END);
+        if (teleportTarget.world().getRegistryKey() == World.END && instance.getWorld().getRegistryKey() != World.END && gameRule) {
             portalTravelingToEnd.set(true);
             TeleportTarget returnPortalTeleportTarget = ((Entity)(Object) this).portalManager.createTeleportTarget(teleportTarget.world(), instance);
             Entity entity = instance.teleportTo(returnPortalTeleportTarget);
