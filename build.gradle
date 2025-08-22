@@ -25,10 +25,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 }
 
-loom {
-	accessWidenerPath = file("src/main/resources/skiptheend.accesswidener")
-}
-
 processResources {
     inputs.property "version", project.version
 

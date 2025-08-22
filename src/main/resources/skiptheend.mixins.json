@@ -3,6 +3,7 @@
   "package": "xyz.toastberries.skiptheend.mixin",
   "mixins": [
     "EntityMixin",
+    "FallingBlockEntityMixin",
     "ServerPlayerEntityMixin"
   ],
   "injectors": {
