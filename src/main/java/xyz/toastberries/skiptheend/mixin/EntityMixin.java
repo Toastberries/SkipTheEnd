@@ -20,8 +20,8 @@ public abstract class EntityMixin {
     @Redirect(method = "tickPortalTeleportation",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/entity/Entity;"))
     private Entity redirectEndBoundPortalTravel(Entity instance, TeleportTarget teleportTarget) {
-        boolean gameRule = ((ServerWorld) instance.getWorld()).getGameRules().getBoolean(SKIP_THE_END);
-        if (teleportTarget.world().getRegistryKey() == World.END && instance.getWorld().getRegistryKey() != World.END && gameRule) {
+        boolean gameRule = ((ServerWorld) instance.getEntityWorld()).getGameRules().getBoolean(SKIP_THE_END);
+        if (teleportTarget.world().getRegistryKey() == World.END && instance.getEntityWorld().getRegistryKey() != World.END && gameRule) {
             portalTravelingToEnd.set(true);
             TeleportTarget returnPortalTeleportTarget = ((Entity)(Object) this).portalManager.createTeleportTarget(teleportTarget.world(), instance);
             Entity entity = instance.teleportTo(returnPortalTeleportTarget);
