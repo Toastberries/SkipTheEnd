@@ -22,9 +22,9 @@
 		"skiptheend.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.20",
+		"fabricloader": ">=0.17.3",
         "fabric-api": "*",
-		"minecraft": ">=1.21.6",
+		"minecraft": ">=1.21.11",
 		"java": ">=21"
 	}
 }

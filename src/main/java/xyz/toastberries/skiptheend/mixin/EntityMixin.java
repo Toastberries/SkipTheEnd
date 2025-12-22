@@ -1,10 +1,11 @@
 package xyz.toastberries.skiptheend.mixin;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
+
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.TeleportTransition;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -17,30 +18,30 @@ import static xyz.toastberries.skiptheend.TeleportContext.portalTravelingToEnd;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-    @Redirect(method = "tickPortalTeleportation",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/entity/Entity;"))
-    private Entity redirectEndBoundPortalTravel(Entity instance, TeleportTarget teleportTarget) {
-        boolean gameRule = ((ServerWorld) instance.getEntityWorld()).getGameRules().getBoolean(SKIP_THE_END);
-        if (teleportTarget.world().getRegistryKey() == World.END && instance.getEntityWorld().getRegistryKey() != World.END && gameRule) {
+    @Redirect(method = "handlePortal",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/world/entity/Entity;"))
+    private Entity redirectEndBoundPortalTravel(Entity instance, TeleportTransition teleportTransition) {
+        boolean gameRule = ((ServerLevel) instance.level()).getGameRules().get(SKIP_THE_END);
+        if (teleportTransition.newLevel().dimension() == Level.END && instance.level().dimension() != Level.END && gameRule) {
             portalTravelingToEnd.set(true);
-            TeleportTarget returnPortalTeleportTarget = ((Entity)(Object) this).portalManager.createTeleportTarget(teleportTarget.world(), instance);
-            Entity entity = instance.teleportTo(returnPortalTeleportTarget);
+            TeleportTransition returnPortalTeleportTarget = ((Entity)(Object) this).portalProcess.getPortalDestination(teleportTransition.newLevel(), instance);
+            Entity entity = instance.teleport(returnPortalTeleportTarget);
             portalTravelingToEnd.set(false);
             return entity;
         }
-        return instance.teleportTo(teleportTarget);
+        return instance.teleport(teleportTransition);
     }
 
-    @ModifyVariable(method = "teleportTo", at = @At("STORE"))
+    @ModifyVariable(method = "teleport", at = @At("STORE"))
     private boolean forceCrossDimensionalTeleportLogic(boolean bl) {
         return portalTravelingToEnd.get() || bl;
     }
 
-    @Redirect(method = "teleportSpectatingPlayers",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getPlayers()Ljava/util/List;"))
-    private List<ServerPlayerEntity> removeSelfFromTeleportedSpectators(ServerWorld instance) {
+    @Redirect(method = "teleportSpectators",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;players()Ljava/util/List;"))
+    private List<ServerPlayer> removeSelfFromTeleportedSpectators(ServerLevel instance) {
         return portalTravelingToEnd.get()
-                ? instance.getPlayers().stream().filter(player -> player != (Object) this).toList()
-                : instance.getPlayers();
+                ? instance.players().stream().filter(player -> player != (Object) this).toList()
+                : instance.players();
     }
 }
