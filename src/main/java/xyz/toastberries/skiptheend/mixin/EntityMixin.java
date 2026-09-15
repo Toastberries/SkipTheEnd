@@ -18,18 +18,18 @@ import static xyz.toastberries.skiptheend.TeleportContext.portalTravelingToEnd;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-    @Redirect(method = "handlePortal",
+    @Redirect(method = "teleportToPortalDestination",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/world/entity/Entity;"))
-    private Entity redirectEndBoundPortalTravel(Entity instance, TeleportTransition teleportTransition) {
+    private Entity redirectEndBoundPortalTravel(Entity instance, TeleportTransition transition) {
         boolean gameRule = ((ServerLevel) instance.level()).getGameRules().get(SKIP_THE_END);
-        if (teleportTransition.newLevel().dimension() == Level.END && instance.level().dimension() != Level.END && gameRule) {
+        if (transition.newLevel().dimension() == Level.END && instance.level().dimension() != Level.END && gameRule) {
             portalTravelingToEnd.set(true);
-            TeleportTransition returnPortalTeleportTarget = ((Entity)(Object) this).portalProcess.getPortalDestination(teleportTransition.newLevel(), instance);
+            TeleportTransition returnPortalTeleportTarget = ((Entity)(Object) this).portalProcess.getPortalDestination(transition.newLevel(), instance);
             Entity entity = instance.teleport(returnPortalTeleportTarget);
             portalTravelingToEnd.set(false);
             return entity;
         }
-        return instance.teleport(teleportTransition);
+        return instance.teleport(transition);
     }
 
     @ModifyVariable(method = "teleport", at = @At("STORE"))

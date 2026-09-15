@@ -9,9 +9,9 @@ import static xyz.toastberries.skiptheend.TeleportContext.portalTravelingToEnd;
 
 @Mixin(FallingBlockEntity.class)
 public abstract class FallingBlockEntityMixin {
-    @ModifyVariable(method = "teleport", at = @At("STORE"))
-    private boolean forceDuplicationBehaviour(boolean bl) {
-        return portalTravelingToEnd.get() || bl;
+    @ModifyVariable(method = "teleport", at = @At("STORE"), name = "fromOrToEnd")
+    private boolean forceDuplicationBehaviour(boolean fromOrToEnd) {
+        return portalTravelingToEnd.get() || fromOrToEnd;
     }
 }
 
